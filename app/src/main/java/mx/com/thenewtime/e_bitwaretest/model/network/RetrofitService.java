@@ -1,11 +1,9 @@
 package mx.com.thenewtime.e_bitwaretest.model.network;
 
-import com.mosso.abi.apptest.model.pojos.Palabra;
-import com.mosso.abi.apptest.model.pojos.ResponseApi;
-import com.mosso.abi.apptest.model.pojos.Usuario;
-
 import java.util.List;
 
+import mx.com.thenewtime.e_bitwaretest.model.pojos.Persona;
+import mx.com.thenewtime.e_bitwaretest.model.pojos.ResponseWs;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -15,30 +13,18 @@ import retrofit2.http.Path;
 
 public interface RetrofitService {
 
-    String BASE_URL = "http://mephaa.com.mx/ws/";
+    String BASE_URL = "http://187.188.122.85:8091/NutriNet/";
 
-    @GET("login/{usuario}")
-    Call<Usuario> login(@Path("usuario") String usuario);
+    @GET("Cliente/{id}")
+    Call<Persona> getCliente(@Path("id") String idCliente);
 
-    @GET("login")
-    Call<List<Usuario>> allUsers();
+    @GET("Cliente")
+    Call<List<Persona>> getAllClientes();
 
-    @GET("login/{id}")
-    Call<Usuario> getUser(@Path("id") String idAuto);
+    @POST("Cliente")
+    Call<List<ResponseWs>> addCliente(@Body Persona cliente);
 
-    @POST("login")
-    Call<ResponseApi> addUser(@Body Usuario auto);
-
-    @PUT("login")
-    Call<ResponseApi> putUser(@Body Usuario auto);
-
-    @POST("palabra")
-    Call<ResponseApi> uploadFile(@Body Palabra palabra);
-
-    @GET("palabra")
-    Call<List<Palabra>> allPalabras();
-
-    @GET("palabra/{id}")
-    Call<Palabra> getPalabra(@Path("id") String id);
+    @PUT("Cliente/{id}")
+    Call<List<ResponseWs>> editCliente(@Path("id") String idCliente, @Body Persona cliente);
 
 }

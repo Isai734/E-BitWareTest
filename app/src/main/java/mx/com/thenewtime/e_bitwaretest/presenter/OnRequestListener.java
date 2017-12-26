@@ -1,14 +1,10 @@
 package mx.com.thenewtime.e_bitwaretest.presenter;
-
-
-
-import com.mosso.abi.apptest.model.pojos.ResponseApi;
-
+import mx.com.thenewtime.e_bitwaretest.model.pojos.ResponseWs;
 import retrofit2.Response;
 
 public interface OnRequestListener {
 
-    void onFailure(ResponseApi response);
+    void onFailure(ResponseWs response);
 
     void onSucces(Response response);
 

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017. Desarrollado por <a href="https://plus.google.com/u/0/+IsaiCastroAlv">Isai Castro G+</a>
+ */
+
 package mx.com.thenewtime.e_bitwaretest.model.network;
 
 import android.util.Log;
@@ -5,7 +9,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.List;
 
-import mx.com.thenewtime.e_bitwaretest.model.pojos.ResponseApi;
+import mx.com.thenewtime.e_bitwaretest.model.pojos.ResponseWs;
 import mx.com.thenewtime.e_bitwaretest.presenter.OnRequestListener;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,15 +37,15 @@ public abstract class AbstractOperInteractor<E> {
         attemptRequest(e);
     }
 
-    public void post(Call<ResponseApi> e) {
+    public void post(Call<List<ResponseWs>> e) {
         attemptRequest(e);
     }
 
-    public void put(Call<ResponseApi> e) {
+    public void put(Call<List<ResponseWs>> e) {
         attemptRequest(e);
     }
 
-    public void delete(Call<ResponseApi> e) {
+    public void delete(Call<ResponseWs> e) {
         attemptRequest(e);
     }
 
@@ -58,20 +62,19 @@ public abstract class AbstractOperInteractor<E> {
                             .contentType()
                             .subtype()
                             .equals("json")) {
-                        ResponseApi responseApi = ResponseApi.fromResponseBody(response.errorBody());
+                        ResponseWs responseApi = ResponseWs.fromResponseBody(response.errorBody());
                         error = responseApi.getMensaje();
-                        Log.d("LoginActivity", responseApi.getMensaje());
+                        Log.d(TAG, responseApi.getMensaje());
                         listener.onFailure(responseApi);
                     } else {
                         try {
                             /**
                              *Reportar causas de error no relacionado con la API
                              */
-                            Log.d("LoginActivity", response.errorBody().string());
+                            Log.d(TAG, response.errorBody().string());
 
                         } catch (IOException e) {
                             e.printStackTrace();
-
                         }
                     }
                     return;
@@ -80,11 +83,9 @@ public abstract class AbstractOperInteractor<E> {
                      * Si no existen errores entonces se notifica al listener que el procesos termino en ok se actualiza
                      * el origen de datos y la vista...
                      */
-
+                    Log.d(TAG, "Succes with code : " + response.code());
                     listener.onSucces(response);
                 }
-
-
             }
 
             @Override
@@ -92,7 +93,8 @@ public abstract class AbstractOperInteractor<E> {
                 /**
                  * Aqui se notifican errores relacionados con la comunicación...
                  */
-                listener.onFailure(new ResponseApi(9, t.getMessage()));
+                Log.d(TAG, "onFailure with message : " + t.getMessage());
+                listener.onFailure(new ResponseWs(9, t.getMessage()));
             }
         });
     }

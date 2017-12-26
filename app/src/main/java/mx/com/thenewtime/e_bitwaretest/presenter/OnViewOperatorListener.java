@@ -1,6 +1,7 @@
 package mx.com.thenewtime.e_bitwaretest.presenter;
 
 
+import mx.com.thenewtime.e_bitwaretest.model.pojos.ResponseWs;
 
 public interface OnViewOperatorListener {
 
@@ -10,6 +11,6 @@ public interface OnViewOperatorListener {
 
     void onRequestError(String error);
 
-    void onRequestOk(String message);
+    void onRequestOk(ResponseWs message);
 
 }

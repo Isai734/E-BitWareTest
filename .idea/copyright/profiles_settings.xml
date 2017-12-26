@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="" />
+  <settings default="IsaiPrf">
+    <module2copyright>
+      <element module="All" copyright="IsaiPrf" />
+    </module2copyright>
+  </settings>
 </component>
