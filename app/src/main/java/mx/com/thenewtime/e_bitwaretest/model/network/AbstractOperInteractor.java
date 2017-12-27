@@ -6,6 +6,9 @@ package mx.com.thenewtime.e_bitwaretest.model.network;
 
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -58,17 +61,30 @@ public abstract class AbstractOperInteractor<E> {
                  */
                 if (!response.isSuccessful()) {
                     String error = "Ha ocurrido un error. Contacte al administrador";
+                    String json = "";
                     if (response.errorBody()
                             .contentType()
                             .subtype()
                             .equals("json")) {
-                        ResponseWs responseApi = ResponseWs.fromResponseBody(response.errorBody());
-                        error = responseApi.getMensaje();
-                        Log.d(TAG, responseApi.getMensaje());
-                        listener.onFailure(responseApi);
+                        try {
+                            json = response.errorBody().string();
+                            List<ResponseWs> responseApi = ResponseWs.fromResponseBody(json);
+                            //error = responseApi.get(0).getMensaje();
+                            Log.d(TAG, responseApi.toString());
+                            listener.onFailure(responseApi.get(0));
+                        } catch (Exception e) {
+                            try {
+                                listener.onFailure(new ResponseWs(-4, new JSONObject(json).get("Message").toString()));
+                            } catch (JSONException e1) {
+                                Log.i(TAG, e1.toString());
+                            }
+                            Log.i(TAG, e.toString());
+                        }
+
+
                     } else {
                         try {
-                            /**
+                            /*
                              *Reportar causas de error no relacionado con la API
                              */
                             Log.d(TAG, response.errorBody().string());
@@ -79,7 +95,7 @@ public abstract class AbstractOperInteractor<E> {
                     }
                     return;
                 } else {
-                    /**
+                    /*
                      * Si no existen errores entonces se notifica al listener que el procesos termino en ok se actualiza
                      * el origen de datos y la vista...
                      */
@@ -90,7 +106,7 @@ public abstract class AbstractOperInteractor<E> {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                /**
+                /*
                  * Aqui se notifican errores relacionados con la comunicación...
                  */
                 Log.d(TAG, "onFailure with message : " + t.getMessage());

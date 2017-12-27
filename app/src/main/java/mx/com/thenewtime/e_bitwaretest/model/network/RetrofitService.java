@@ -7,6 +7,7 @@ import mx.com.thenewtime.e_bitwaretest.model.pojos.ResponseWs;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -21,9 +22,11 @@ public interface RetrofitService {
     @GET("Cliente")
     Call<List<Persona>> getAllClientes();
 
+    //@Headers("Content-Type: text/plain")
     @POST("Cliente")
     Call<List<ResponseWs>> addCliente(@Body Persona cliente);
 
+    @Headers("Content-Type: application/json")
     @PUT("Cliente/{id}")
     Call<List<ResponseWs>> editCliente(@Path("id") String idCliente, @Body Persona cliente);
 

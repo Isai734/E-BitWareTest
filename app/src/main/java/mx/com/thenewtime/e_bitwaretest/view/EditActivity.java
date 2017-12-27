@@ -5,8 +5,8 @@
 package mx.com.thenewtime.e_bitwaretest.view;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,9 +22,9 @@ import mx.com.thenewtime.e_bitwaretest.model.pojos.Persona;
 import mx.com.thenewtime.e_bitwaretest.model.pojos.ResponseWs;
 import mx.com.thenewtime.e_bitwaretest.presenter.ClienteImpOperator;
 import mx.com.thenewtime.e_bitwaretest.presenter.OnViewOperatorListener;
+import mx.com.thenewtime.e_bitwaretest.utils.Constants;
 
-public class AddActivity extends AppCompatActivity implements OnViewOperatorListener {
-
+public class EditActivity extends AppCompatActivity implements OnViewOperatorListener {
     private static final String TAG = AddActivity.class.getSimpleName();
     private EditText user;
     private EditText pass;
@@ -35,11 +35,12 @@ public class AddActivity extends AppCompatActivity implements OnViewOperatorList
     private Button btnSave;
     private ClienteImpOperator impOperator;
     private Persona persona;
+    private String TYPE_REQUEST = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+        setContentView(R.layout.activity_edit);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -49,26 +50,52 @@ public class AddActivity extends AppCompatActivity implements OnViewOperatorList
         user_name = (EditText) findViewById(R.id.user_name);
         user_apellidos = (EditText) findViewById(R.id.user_apellidos);
         userEmail = (EditText) findViewById(R.id.user_email);
-        btnSave = (Button) findViewById(R.id.btn_save);
+        btnSave = (Button) findViewById(R.id.btn_edit);
         impOperator = new ClienteImpOperator(this);
+        persona = new Persona();
+        setFields(getIntent());
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!validateFields())
                     return;
-                attempPost();
+                attempPut();
             }
         });
     }
 
-    public void attempPost() {
+    public void setFields(Intent data) {
+        int userId = data.getIntExtra(Persona.Columnas.CLIENTE_ID, 0);
+        String usern = data.getStringExtra(Persona.Columnas.NOMBRE_USUARIO);
+        String passw = data.getStringExtra(Persona.Columnas.CONTRASEÑA);
+        String name = data.getStringExtra(Persona.Columnas.NOMBRE);
+        String apll = (data.getStringExtra(Persona.Columnas.APELLIDOS));
+        String email = (data.getStringExtra(Persona.Columnas.CORREO_ELECTRONICO));
+
+        persona.setCliente_ID(userId);
+        persona.setNombre_Usuario(usern);
+        persona.setContraseña(passw);
+        persona.setNombre(name);
+        persona.setApellidos(apll);
+        persona.setCorreo_Electronico(email);
+
+        user.setText(usern);
+        pass.setText(passw);
+        passConfirm.setText(passw);
+        user_name.setText(name);
+        user_apellidos.setText(apll);
+        userEmail.setText(email);
+    }
+
+    public void attempPut() {
+        TYPE_REQUEST = Constants.PUT;
         String usern = user.getText().toString();
         String passw = pass.getText().toString();
         String name = user_name.getText().toString();
         String apll = user_apellidos.getText().toString();
         String email = userEmail.getText().toString();
-        persona = new Persona();
+
 
         persona.setNombre_Usuario(usern);
         persona.setContraseña(passw);
@@ -76,7 +103,7 @@ public class AddActivity extends AppCompatActivity implements OnViewOperatorList
         persona.setApellidos(apll);
         persona.setCorreo_Electronico(email);
 
-        impOperator.addCliente(persona);
+        impOperator.putCliente(persona.getCliente_ID() + "", persona);
     }
 
     public boolean validateFields() {
@@ -122,7 +149,7 @@ public class AddActivity extends AppCompatActivity implements OnViewOperatorList
 
     }
 
-    @Override
+
     public void onRequestError(String error) {
         Snackbar.make(getCurrentFocus(), error, Snackbar.LENGTH_LONG).show();
         Log.i(TAG, error);
@@ -130,11 +157,18 @@ public class AddActivity extends AppCompatActivity implements OnViewOperatorList
 
     @Override
     public void onRequestOk(ResponseWs message) {
-        persona.setCliente_ID(message.getCve_Mensaje());
-        DataSource.getInstance().getListObject(Persona.class).add(persona);
-        Snackbar.make(getCurrentFocus(), message.getMensaje(), Snackbar.LENGTH_LONG).show();
-        Log.i(TAG, message.getMensaje());
-        alertMessage("Cliente Agregado Correctamente ID: " + persona.getCliente_ID()).show();
+        switch (TYPE_REQUEST) {
+            case Constants.PUT:
+                impOperator.getAllClientes();
+                TYPE_REQUEST = Constants.GETS;
+                break;
+            case Constants.GETS:
+                Snackbar.make(getCurrentFocus(), message.getMensaje(), Snackbar.LENGTH_LONG).show();
+                Log.i(TAG, message.getMensaje());
+                alertMessage("Cliente Agregado Correctamente ID: " + persona.getCliente_ID()).show();
+                break;
+        }
+
     }
 
     public AlertDialog alertMessage(String message) {

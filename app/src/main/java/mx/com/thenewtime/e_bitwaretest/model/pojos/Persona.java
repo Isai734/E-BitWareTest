@@ -1,4 +1,7 @@
 package mx.com.thenewtime.e_bitwaretest.model.pojos;
+
+import android.provider.BaseColumns;
+
 import java.util.Random;
 
 public class Persona {
@@ -51,7 +54,7 @@ public class Persona {
     private void generaNSS() {
         int k = 10;
         int res;
-        int[] numeros = {0,1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int[] numeros = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         String[] letras = {"A", "E", "I", "O", "U"};
         Random rnd = new Random();
 
@@ -174,16 +177,37 @@ public class Persona {
     @Override
     public String toString() {
         return "Persona{" +
-                "Nombre='" + Nombre + '\'' +"\n"+
-                ", Apellidos='" + Apellidos + '\'' +"\n"+
-                ", Edad=" + Edad +"\n"+
-                ", NSS='" + NSS + '\'' +"\n"+
-                ", Peso=" + Peso +"\n"+
-                ", Estatura=" + Estatura +"\n"+
-                ", Sexo='" + Sexo + '\'' +"\n"+
-                ", Nombre_Usuario='" + Nombre_Usuario + '\'' +"\n"+
-                ", Contraseña='" + Contraseña + '\'' +"\n"+
-                ", Correo_Electronico='" + Correo_Electronico + '\'' +"\n"+
+                "Nombre='" + Nombre + '\'' + "\n" +
+                ", Apellidos='" + Apellidos + '\'' + "\n" +
+                ", Edad=" + Edad + "\n" +
+                ", NSS='" + NSS + '\'' + "\n" +
+                ", Peso=" + Peso + "\n" +
+                ", Estatura=" + Estatura + "\n" +
+                ", Sexo='" + Sexo + '\'' + "\n" +
+                ", Nombre_Usuario='" + Nombre_Usuario + '\'' + "\n" +
+                ", Contraseña='" + Contraseña + '\'' + "\n" +
+                ", Correo_Electronico='" + Correo_Electronico + '\'' + "\n" +
                 '}';
+    }
+
+    public static class Columnas implements BaseColumns {
+
+        public Columnas() {
+
+        }
+
+        public static String CLIENTE_ID = "CLIENTE_ID";
+        public static String NOMBRE_USUARIO = "NOMBRE_USUARIO";
+        public static String CONTRASEÑA = "CONTRASEÑA";
+        public static String NOMBRE = "NOMBRE";
+        public static String APELLIDOS = "APELLIDOS";
+        public static String CORREO_ELECTRONICO = "CORREO_ELECTRONICO";
+        public static String EDAD = "EDAD";
+        public static String ESTATURA = "ESTATURA";
+        public static String NSS = "NSS";
+        public static String PESO = "PESO";
+        public static String SEXO = "SEXO";
+
+
     }
 }

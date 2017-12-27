@@ -52,6 +52,13 @@ public class MyPersonaRVAdapter extends RecyclerView.Adapter<MyPersonaRVAdapter.
         holder.mEmailView.setText(cliente.getCorreo_Electronico());
         holder.mEdadView.setText("Edad : " + cliente.getEdad());
 
+        holder.mViewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onListFragmentEdit(holder.mItem);
+            }
+        });
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +82,7 @@ public class MyPersonaRVAdapter extends RecyclerView.Adapter<MyPersonaRVAdapter.
         public final TextView mNameView;
         public final TextView mEmailView;
         public final TextView mEdadView;
+        public final View mViewEdit;
         public Persona mItem;
 
         public ViewHolder(View view) {
@@ -84,6 +92,7 @@ public class MyPersonaRVAdapter extends RecyclerView.Adapter<MyPersonaRVAdapter.
             mNameView = (TextView) view.findViewById(R.id.c_nombre);
             mEmailView = (TextView) view.findViewById(R.id.c_email);
             mEdadView = (TextView) view.findViewById(R.id.c_edad);
+            mViewEdit = (View) view.findViewById(R.id.v_edit);
         }
 
         @Override

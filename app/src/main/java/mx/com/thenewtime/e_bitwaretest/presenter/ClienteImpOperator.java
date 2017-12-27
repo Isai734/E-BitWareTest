@@ -71,7 +71,7 @@ public class ClienteImpOperator extends AbstractOperInteractor<Persona> implemen
         /**
          * Se define el tipo de peticion para posteriormente procesar la respuesta
          */
-        ResponseWs responseWs = null;
+        List<ResponseWs> responseWs = null;
         switch (method) {
             case Constants.GETS:
                 List<Persona> list = (List<Persona>) response.body();
@@ -88,19 +88,19 @@ public class ClienteImpOperator extends AbstractOperInteractor<Persona> implemen
                 break;
             case Constants.POST:
                 vListener.onHideProgress();
-                responseWs = (ResponseWs) response.body();
+                responseWs = (List<ResponseWs>) response.body();
                 if (response.code() == 201) {
-                    vListener.onRequestOk(responseWs);
+                    vListener.onRequestOk(responseWs.get(0));
                 } else
-                    vListener.onRequestError(responseWs.getMensaje());
+                    vListener.onRequestError(responseWs.get(0).getMensaje());
                 break;
             case Constants.PUT:
-                responseWs = (ResponseWs) response.body();
+                responseWs = (List<ResponseWs>) response.body();
                 vListener.onHideProgress();
                 if (response.code() == 201) {
-                    vListener.onRequestOk(responseWs);
+                    vListener.onRequestOk(responseWs.get(0));
                 } else
-                    vListener.onRequestError(responseWs.getMensaje());
+                    vListener.onRequestError(responseWs.get(0).getMensaje());
                 break;
         }
 

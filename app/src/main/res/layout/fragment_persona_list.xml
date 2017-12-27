@@ -2,16 +2,32 @@
 <!--
   ~ Copyright (c) 2017. Desarrollado por <a href="https://plus.google.com/u/0/+IsaiCastroAlv">Isai Castro G+</a>
   -->
-
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="mx.com.thenewtime.e_bitwaretest.view.PersonaFragment"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="mx.com.thenewtime.e_bitwaretest.view.PersonaFragment"
-    tools:listitem="@layout/fragment_persona" />
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:name="mx.com.thenewtime.e_bitwaretest.view.PersonaFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/fragment_persona" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add"
+        android:layout_width="64sp"
+        android:layout_height="64sp"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_plus_black_48dp"
+        app:borderWidth="0dp"
+        app:fabSize="normal" />
+</FrameLayout>
+
+

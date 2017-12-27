@@ -5,7 +5,9 @@
 package mx.com.thenewtime.e_bitwaretest.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -41,6 +43,7 @@ public class PersonaFragment extends Fragment implements OnViewOperatorListener 
     private MyPersonaRVAdapter rvAdapter;
     private ClienteImpOperator impOperator;
 
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -73,17 +76,24 @@ public class PersonaFragment extends Fragment implements OnViewOperatorListener 
         View view = inflater.inflate(R.layout.fragment_persona_list, container, false);
         rvAdapter = new MyPersonaRVAdapter(null, mListener);
         impOperator = new ClienteImpOperator(this);
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        FloatingActionButton fabAdd = (FloatingActionButton) view.findViewById(R.id.fab_add);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), AddActivity.class));
             }
-            recyclerView.setAdapter(rvAdapter);
+        });
+        // Set the adapter
+
+        Context context = view.getContext();
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        if (mColumnCount <= 1) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
+        recyclerView.setAdapter(rvAdapter);
+
         impOperator.getAllClientes();
         return view;
     }
@@ -98,6 +108,12 @@ public class PersonaFragment extends Fragment implements OnViewOperatorListener 
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        rvAdapter.swapData(DataSource.getInstance().getListObject(Persona.class));
     }
 
     @Override
@@ -118,15 +134,15 @@ public class PersonaFragment extends Fragment implements OnViewOperatorListener 
 
     @Override
     public void onRequestError(String error) {
-        Snackbar.make(getView(),error,Snackbar.LENGTH_LONG).show();
-        Log.i(TAG,error);
+        Snackbar.make(getView(), error, Snackbar.LENGTH_LONG).show();
+        Log.i(TAG, error);
     }
 
     @Override
     public void onRequestOk(ResponseWs message) {
         rvAdapter.swapData(DataSource.getInstance().getListObject(Persona.class));
-        Snackbar.make(getView(),message.getMensaje(),Snackbar.LENGTH_LONG).show();
-        Log.i(TAG,message.getMensaje());
+        Snackbar.make(getView(), message.getMensaje(), Snackbar.LENGTH_LONG).show();
+        Log.i(TAG, message.getMensaje());
     }
 
     /**
@@ -142,5 +158,6 @@ public class PersonaFragment extends Fragment implements OnViewOperatorListener 
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Persona item);
+        void onListFragmentEdit(Persona item);
     }
 }
