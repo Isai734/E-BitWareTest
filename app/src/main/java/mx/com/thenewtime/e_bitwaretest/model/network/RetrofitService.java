@@ -26,7 +26,7 @@ public interface RetrofitService {
     @POST("Cliente")
     Call<List<ResponseWs>> addCliente(@Body Persona cliente);
 
-    //@Headers("Content-Type: application/json")
+    @Headers("Content-Type: application/json")
     @PUT("Cliente/{id}")
     Call<List<ResponseWs>> editCliente(@Path("id") String idCliente, @Body Persona cliente);
 
