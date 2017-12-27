@@ -22,11 +22,11 @@ public interface RetrofitService {
     @GET("Cliente")
     Call<List<Persona>> getAllClientes();
 
-    //@Headers("Content-Type: text/plain")
+    @Headers("Content-Type: text/plain")
     @POST("Cliente")
     Call<List<ResponseWs>> addCliente(@Body Persona cliente);
 
-    @Headers("Content-Type: application/json")
+    //@Headers("Content-Type: application/json")
     @PUT("Cliente/{id}")
     Call<List<ResponseWs>> editCliente(@Path("id") String idCliente, @Body Persona cliente);
 
